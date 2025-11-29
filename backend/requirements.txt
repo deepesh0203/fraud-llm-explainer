@@ -14,3 +14,4 @@ tqdm
 langchain>=0.0.200
 google-genai
 requests
+streamlit
