@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    container_name: mlflow
+    restart: always
+    ports:
+      - "5000:5000"
+    command:
+      - mlflow
+      - server
+      - --host=0.0.0.0
+      - --port=5000
+      - --backend-store-uri=/mlflow
+      - --default-artifact-root=/mlflow
+    volumes:
+      - ./mlruns:/mlflow
+
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
+  api:
+    build: .
+    container_name: fraud_api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      MODEL_PATH: model/fraud_model.pkl
+      SHAP_EXPLAINER_PATH: model/shap_explainer.pkl
+      SHAP_VALUES_PATH: model/shap_values.pkl
+      SCALER_PATH: model/scaler.pkl
+      LLM_PROVIDER: gemini
+      REDIS_ENABLED: "true"
+      MLFLOW_TRACKING: "true"
+    depends_on:
+      - redis
+      - mlflow
+    volumes:
+      - ../model:/app/model  # mount the model folder inside the container
+
+volumes:
+  redis_data:

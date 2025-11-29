@@ -1,0 +1,44 @@
+# Virtual environments
+venv/
+fraudenv/
+.env/
+
+# Environment files
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# ML artifacts
+mlruns/
+logs/
+model/
+*.pkl
+*.joblib
+
+# Datasets
+*.csv
+*.xlsx
+*.parquet
+dataset/
+data/
+
+# Jupyter notebooks
+*.ipynb
+
+# Docker images / build cache
+*.tar
+*.img
+docker-images/
+
+# IDE junk
+.vscode/
+.idea/
+
+# Streamlit cache
+.streamlit/
+
+# OS files
+.DS_Store
+Thumbs.db

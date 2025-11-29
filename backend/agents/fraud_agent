@@ -1,0 +1,46 @@
+# backend/agents/fraud_agent.py
+import json
+from utils.llm_agent import LLMAgent
+from utils.redis_client import get_cache, set_cache
+
+llm = LLMAgent()
+
+class FraudAgent:
+    def __init__(self):
+        self.llm = llm
+
+    def run(self, prompt: str, payload: dict):
+        """
+        payload: same body you send to /predict_and_explain
+        returns: a composed response (string) from LLM
+        """
+        # cache key
+        cache_key = "agent:" + str(hash(prompt + str(payload)))
+        cached = get_cache(cache_key)
+        if cached:
+            return cached
+
+        # Import internal predict function (kept inside main.py)
+        try:
+            from main import predict_and_explain_internal
+        except Exception as e:
+            # fallback: direct call to API could be implemented instead
+            raise RuntimeError("predict_and_explain_internal import failed: " + str(e))
+
+        pred = predict_and_explain_internal(payload)
+        # Build inputs for LLM
+        llm_inputs = {
+            "fraud_probability": pred.get("fraud_probability", 0.0),
+            "top_positive_factors": pred.get("top_positive_factors", {}),
+            "top_negative_factors": pred.get("top_negative_factors", {}),
+            "feature_values": pred.get("feature_values", {})
+        }
+        llm_out = self.llm.explain(llm_inputs)
+        result = {
+            "model_result": pred,
+            "agent_summary": llm_out
+        }
+        set_cache(cache_key, result, ttl=3600)
+        return result
+
+agent = FraudAgent()
