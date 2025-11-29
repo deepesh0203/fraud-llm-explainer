@@ -9,6 +9,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy entire project
 COPY . .
 
+# Make root folder importable (Fix for "No module named utils")
+ENV PYTHONPATH="/app"
+
 # Expose Streamlit (8501) and FastAPI (8000)
 EXPOSE 8000
 EXPOSE 8501
