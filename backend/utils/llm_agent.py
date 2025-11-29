@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini")
 REDIS_ENABLED = os.getenv("REDIS_ENABLED", "false").lower() == "true"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 openai_client = None
 gemini_client = None
