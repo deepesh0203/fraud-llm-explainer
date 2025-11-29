@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-API_URL = "http://localhost:8080/predict_and_explain"
+API_URL = "https://fraud-llm-explainer-production.up.railway.app/predict_and_explain"
 
 st.set_page_config(page_title="Fraud Explainability Agent", layout="wide")
 
@@ -30,7 +30,7 @@ if st.button("Analyze Transaction"):
 
     payload = {
         "features": values,
-        "feature_names": FEATURE_NAMES   # <-- FIXED (no renaming)
+        "feature_names": FEATURE_NAMES
     }
 
     with st.spinner("Analyzing..."):
@@ -61,8 +61,8 @@ if st.button("Analyze Transaction"):
 
         # SHAP Contributions
         st.subheader("🔬 SHAP Feature Contributions")
-        st.json(result["shap_contributions"])
+        st.json(result.get("shap_contributions", {}))
 
         # LLM Explanation
         st.subheader("🧠 LLM Explanation")
-        st.write(result["llm_explanation"])
+        st.write(result.get("llm_explanation", "No explanation available."))

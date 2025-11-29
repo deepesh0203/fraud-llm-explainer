@@ -90,4 +90,7 @@ def predict_and_explain(payload: Transaction):
     explanation = llm_agent.explain(prompt_inputs)
     summary["llm_explanation"] = explanation
 
+    # ✅ Add this line so Streamlit can read SHAP
+    summary["shap_contributions"] = shap_vals
+
     return summary
