@@ -8,8 +8,8 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
-from utils.shap_utils import get_shap_for_instance, build_risk_summary
-from utils.llm_agent import LLMAgent
+from backend.utils.shap_utils import get_shap_for_instance, build_risk_summary
+from backend.utils.llm_agent import LLMAgent
 
 load_dotenv()
 
