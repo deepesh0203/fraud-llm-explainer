@@ -13,7 +13,6 @@ __pycache__/
 # ML artifacts
 mlruns/
 logs/
-*.pkl
 *.joblib
 
 # Datasets
