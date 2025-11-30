@@ -2,7 +2,7 @@ import os
 import json
 import logging
 from dotenv import load_dotenv
-from backend.utils.redis_client import get_cache, set_cache
+from utils.redis_client import get_cache, set_cache
 
 load_dotenv()
 logger = logging.getLogger(__name__)
